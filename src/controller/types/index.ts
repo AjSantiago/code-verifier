@@ -5,6 +5,11 @@ export type BasicResponse = {
   message: string;
 };
 
+export type BasicDateResponse = {
+  message: string;
+  date: Date;
+};
+
 /**
  * Error JSON response for Controllers
  */

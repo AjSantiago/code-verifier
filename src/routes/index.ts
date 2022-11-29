@@ -3,9 +3,10 @@
  * Redirections to Routers
  */
 
-import express, { Request, response, Response } from 'express';
+import express, { Request, Response } from 'express';
 import helloRouter from './HelloRouter';
-import { LogInfo } from '@/utils/logger';
+import goodByeRouter from './GoodByeRouter';
+import { LogInfo } from '../utils/logger';
 
 //* Server instance
 let server = express();
@@ -23,5 +24,6 @@ rootRouter.get('/', (req: Request, res: Response) => {
 //* Redirections to Routers & Controllers
 server.use('/', rootRouter); // http://localhost:8000/api
 server.use('/hello', helloRouter); // http://localhost:8000/api/hello
+server.use('/goodbye', goodByeRouter); // http://localhost:8000/api/goodbye
 
 export default server;
