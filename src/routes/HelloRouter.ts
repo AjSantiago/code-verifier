@@ -1,5 +1,5 @@
-import express, { Request, response, Response } from 'express';
-import { HelloController } from '@/controller/HelloController';
+import express, { Request, Response } from 'express';
+import { HelloController } from '../controller/HelloController';
 import { LogInfo } from '../utils/logger';
 
 //* Router from express
@@ -13,9 +13,8 @@ helloRouter.route('/').get(async (req: Request, res: Response) => {
 
   //* Controller Instance to execute method
   const controller: HelloController = new HelloController();
-  controller.getMessage();
   //* Obtain Response
-  const reponse = await controller.getMessage(name);
+  const response = await controller.getMessage(name);
   //* Send to the client the response
   return res.send(response);
 });
