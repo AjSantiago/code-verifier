@@ -7,14 +7,12 @@ import { LogSuccess } from '../utils/logger';
 @Tags('HelloController')
 export class HelloController implements iHelloController {
   /**
-   * Endpointto retreive a Message 'Hello {name}' in JSON
+   * Endpoint to retreive a Message 'Hello {name}' in JSON
    * @param {string | undefined} name Name of user to be greeted
    * @returns {BasicResponse} Promise of BasicResponse
    */
   @Get('/')
-  public async getMessage(
-    @Query() name?: string | undefined
-  ): Promise<BasicResponse> {
+  public async getMessage(@Query() name?: string): Promise<BasicResponse> {
     LogSuccess('[/api/hello] Get Request');
 
     return {
