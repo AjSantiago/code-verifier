@@ -1,4 +1,9 @@
 import express, { Express, Request, Response } from 'express';
+import mongoose from 'mongoose';
+import { LogError, LogSuccess } from '../utils/logger';
+
+//* Swagger
+import swaggerUi from 'swagger-ui-express';
 
 //* Security
 import cors from 'cors';
@@ -12,6 +17,18 @@ import rootRouter from '../routes';
 //* Create Express App
 const server: Express = express();
 
+//* Swagger Config and Route
+server.use(
+  '/docs',
+  swaggerUi.serve,
+  swaggerUi.setup(undefined, {
+    swaggerOptions: {
+      url: '/swagger.json',
+      explorer: true,
+    },
+  })
+);
+
 //* Define SERVER to use '/api' and use rootRouter from 'index.ts' in routes
 //* http://localhost:8000/api/...
 server.use('/api', rootRouter);
@@ -19,7 +36,15 @@ server.use('/api', rootRouter);
 //* Static server
 server.use(express.static('public'));
 
-//TODO: Mongoose connection
+//* Mongoose connection
+mongoose
+  .connect('mongodb://127.0.0.1:27017/codeverifier')
+  .then(() => {
+    LogSuccess(`BD is now connected`);
+  })
+  .catch((err) => {
+    LogError(`Error: ${err}`);
+  });
 
 //* Security Config
 server.use(helmet());
