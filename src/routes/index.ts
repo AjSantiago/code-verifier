@@ -7,6 +7,7 @@ import express, { Request, Response } from 'express';
 import helloRouter from './HelloRouter';
 import goodByeRouter from './GoodByeRouter';
 import { LogInfo } from '../utils/logger';
+import usersRouter from './UsersRouter';
 
 //* Server instance
 let server = express();
@@ -25,5 +26,6 @@ rootRouter.get('/', (req: Request, res: Response) => {
 server.use('/', rootRouter); // http://localhost:8000/api
 server.use('/hello', helloRouter); // http://localhost:8000/api/hello
 server.use('/goodbye', goodByeRouter); // http://localhost:8000/api/goodbye
+server.use('/users', usersRouter); // http://localhost:8000/api/users
 
 export default server;
