@@ -19,7 +19,7 @@ usersRouter
     const responseController: any = await controller.getUsers(id);
 
     //* Send to the client the response
-    return res.send(responseController);
+    return res.status(200).send(responseController);
   })
   .delete(async (req: Request, res: Response) => {
     //* Obtain a Query Param (Id)
@@ -32,7 +32,7 @@ usersRouter
     const responseController: any = await controller.deleteUser(id);
 
     //* Send to the client the response
-    return res.send(responseController);
+    return res.status(200).send(responseController);
   })
   .post(async (req: Request, res: Response) => {
     let name: any = req?.query?.name;
@@ -51,7 +51,7 @@ usersRouter
     const responseController: any = await controller.createUser(user);
 
     //* Send to the client the response
-    return res.send(responseController);
+    return res.status(201).send(responseController);
   })
   .put(async (req: Request, res: Response) => {
     //* Obtain a Query Param (Id)
@@ -73,7 +73,7 @@ usersRouter
     const responseController: any = await controller.updateUser(id, user);
 
     //* Send to the client the response
-    return res.send(responseController);
+    return res.status(200).send(responseController);
   });
 
 export default usersRouter;
