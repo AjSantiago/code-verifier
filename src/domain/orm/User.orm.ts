@@ -1,5 +1,20 @@
 import { userEntity } from '../entities/User.entity';
 import { LogError } from '../../utils/logger';
+import { IUser } from '../interfaces/IUser.interface';
+import { IAuth } from '../interfaces/IAuth.interface';
+
+//* Bcrypt for passwords
+import bcrypt from 'bcrypt';
+
+//* Environment variables
+import dotenv from 'dotenv';
+//* Configuration of environment
+dotenv.config();
+
+//* JWT
+import jwt from 'jsonwebtoken';
+//* Obtain secret key to generate JWT
+const secret = process.env.SECRETKEY;
 
 //* CRUD
 
@@ -76,4 +91,58 @@ export const updateUserById = async (
   }
 };
 
-//TODO:  - Get User By Email
+/**
+ * Method to register a User
+ */
+export const registerUser = async (user: IUser): Promise<any | undefined> => {
+  try {
+    let userModel = userEntity();
+
+    //* Create /Insert new User
+    return await userModel.create(user);
+  } catch (error) {
+    LogError(`[ORM ERROR]: Creating User: ${error}`);
+  }
+};
+
+export const loginUser = async (auth: IAuth): Promise<any | undefined> => {
+  try {
+    let userModel = userEntity();
+    let userFound: IUser | undefined = undefined;
+    let token = undefined;
+
+    //* Find if user exists by unique email
+    await userModel
+      .findOne({ email: auth.email })
+      .then((user: IUser) => {
+        userFound = user;
+      })
+      .catch((error) => {
+        LogError(`[ORM Error Authentication]: User not found`);
+        throw new Error(`[ORM Error Authentication]: User not found ${error}`);
+      });
+
+    //* User Bcrypt to compare passwords & check if password is valid
+    let validPassword = bcrypt.compareSync(auth.password, userFound!.password);
+
+    if (!validPassword) {
+      LogError(`[ORM Error Authentication]: User not found`);
+      throw new Error(`[ORM Error Authentication]: User not found`);
+    }
+
+    //* Create JWT
+    token = jwt.sign({ email: userFound!.email }, secret, {
+      expiresIn: '2h',
+    });
+
+    return {
+      user: userFound,
+      token,
+    };
+  } catch (error) {
+    LogError(`[ORM ERROR]: Creating User: ${error}`);
+  }
+};
+
+//TODO: Logout user
+export const logoutUser = async (): Promise<any | undefined> => {};

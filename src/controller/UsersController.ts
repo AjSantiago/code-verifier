@@ -25,12 +25,13 @@ export class UsersController implements iUsersController {
 
     if (id) {
       LogSuccess(`[/api/users] Get User By Id: ${id}`);
-
       response = await getUserById(id);
+      //* Remove the password
+      response.password = '';
     } else {
       LogSuccess('[/api/users] Get All Users Request');
-
       response = await getAllUsers();
+      // TODO: Remove passwords from response
     }
 
     return response;
@@ -60,25 +61,6 @@ export class UsersController implements iUsersController {
         message: 'Please, provide an ID to remove from Database',
       };
     }
-
-    return response;
-  }
-
-  /**
-   * Endpoint to create new User in the Colecction 'Users' of DB
-   * @param {any} user
-   * @returns Message informing if creation of new user was correct
-   */
-  @Post('/')
-  public async createUser(user: any): Promise<any> {
-    let response: any = '';
-
-    await createUser(user).then((r) => {
-      LogSuccess(`[/api/users] Create new User: ${user}`);
-      response = {
-        message: `User created successfully: ${user.name}`,
-      };
-    });
 
     return response;
   }
