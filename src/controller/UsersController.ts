@@ -20,18 +20,19 @@ export class UsersController implements iUsersController {
    * @returns  All user o user found by Id
    */
   @Get('/')
-  public async getUsers(@Query() id?: string): Promise<any> {
+  public async getUsers(
+    @Query() page: number,
+    @Query() limit: number,
+    @Query() id?: string
+  ): Promise<any> {
     let response: any = '';
 
     if (id) {
       LogSuccess(`[/api/users] Get User By Id: ${id}`);
       response = await getUserById(id);
-      //* Remove the password
-      response.password = '';
     } else {
       LogSuccess('[/api/users] Get All Users Request');
-      response = await getAllUsers();
-      // TODO: Remove passwords from response
+      response = await getAllUsers(page, limit);
     }
 
     return response;
