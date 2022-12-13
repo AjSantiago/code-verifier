@@ -2,7 +2,6 @@ import express, { Request, Response } from 'express';
 import { AuthController } from '../controller/AuthController';
 import { IUser } from '../domain/interfaces/IUser.interface';
 import { IAuth } from '../domain/interfaces/IAuth.interface';
-import { LogInfo } from '../utils/logger';
 
 //* Router from express
 let authRouter = express.Router();
@@ -32,6 +31,7 @@ authRouter
         email,
         password: hashedPassword,
         age,
+        katas: [],
       };
 
       //* Controller Instance to execute method

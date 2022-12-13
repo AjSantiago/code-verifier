@@ -69,4 +69,24 @@ usersRouter
     return res.status(200).send(responseController);
   });
 
+//* GET ->  http://localhost:8000/api/users/katas
+usersRouter
+  .route('/katas')
+  .get(verifyToken, async (req: Request, res: Response) => {
+    //* Obtain a Query Param (Id)
+    let id: any = req?.query?.id;
+
+    //* Pagination
+    let page: any = req?.query?.page || 1;
+    let limit: any = req?.query?.limit || 10;
+
+    //* Controller Instance to execute method
+    const controller: UsersController = new UsersController();
+    //* Obtain Response
+    const responseController: any = await controller.getKatas(page, limit, id);
+
+    //* Send to the client the response
+    return res.status(200).send(responseController);
+  });
+
 export default usersRouter;

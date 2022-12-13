@@ -7,8 +7,8 @@ import {
   getAllUsers,
   getUserById,
   deleteUserById,
-  createUser,
   updateUserById,
+  getKatasFromUser,
 } from '../domain/orm/User.orm';
 
 @Route('/api/users')
@@ -89,6 +89,26 @@ export class UsersController implements iUsersController {
 
       response = {
         message: 'Please, provide an ID to update an existing user',
+      };
+    }
+
+    return response;
+  }
+  @Get('/katas')
+  public async getKatas(
+    @Query() page: number,
+    @Query() limit: number,
+    @Query() id: string
+  ): Promise<any> {
+    let response: any = '';
+
+    if (id) {
+      LogSuccess(`[/api/users/katas] Get Katas from User By Id: ${id}`);
+      response = await getKatasFromUser(page, limit, id);
+    } else {
+      LogWarning('[/api/users/katas] Get Katas Request without ID');
+      response = {
+        message: 'ID from user is needed',
       };
     }
 
