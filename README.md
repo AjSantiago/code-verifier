@@ -1,1 +1,3 @@
-# code-verifier
+# code-verifier Backend
+
+Node + Express + Typescript + MongoDB
