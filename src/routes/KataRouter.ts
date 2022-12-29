@@ -13,7 +13,10 @@ let jsonParser = bodyParser.json();
 //* Middlewares
 import { verifyToken } from '../middlewares/verifyToken.middleware';
 
-//* GET ->  http://localhost:8000/api/users?id=
+//* File Uploader
+import fileUpload from 'express-fileupload';
+
+//* GET ->  http://localhost:8000/api/katas
 katasRouter
   .route('/')
   .get(verifyToken, async (req: Request, res: Response) => {
@@ -140,6 +143,45 @@ katasRouter
       return res.status(400).send({
         message:
           '[Error]: Creating Kata. You need to send all attrs of Kata to update it',
+      });
+    }
+  });
+
+katasRouter
+  .route('/uploadFile')
+  .post(jsonParser, async (req: Request, res: Response) => {
+    let files: any = req?.body?.files;
+
+    try {
+      if (!files) {
+        res.send({
+          status: false,
+          message: 'No file uploaded',
+          payload: {},
+        });
+      } else {
+        //Use the name of the input field (i.e. "file") to retrieve the uploaded file
+        let file = files.file;
+        //Use the mv() method to place the file in upload directory (i.e. "uploads")
+        file.mv('./uploads/' + file.name);
+        //send response
+        res.send({
+          status: true,
+          message: 'File was uploaded successfully',
+          payload: {
+            name: file.name,
+            mimetype: file.mimetype,
+            size: file.size,
+            //path: '/files/uploads/',
+            //url: 'https://my-ftp-server.com/bjYJGFYgjfVGHVb',
+          },
+        });
+      }
+    } catch (err) {
+      res.status(500).send({
+        status: false,
+        message: 'Unspected problem',
+        payload: {},
       });
     }
   });

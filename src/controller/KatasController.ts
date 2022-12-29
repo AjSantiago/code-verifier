@@ -117,4 +117,9 @@ export class KatasController implements iKataController {
 
     return response;
   }
+
+  @Post('/upload')
+  public async uploadKataFile(): Promise<any> {
+    throw new Error('Method not implemented.');
+  }
 }
